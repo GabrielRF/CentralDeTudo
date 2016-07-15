@@ -1,0 +1,7 @@
+[BOT]
+token = 
+dest = 
+admin =
+
+[LINE]
+file = /usr/local/bin/CentralDeTudo/fila.txt
