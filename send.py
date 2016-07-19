@@ -38,10 +38,10 @@ def send_line(url):
     send_msg(title,url)
 
 def send_msg(title,url):
-    message = ('<b>{}</b>\n' +
-        '<a href="{}">Leia mais</a>').format(title,url)
+    message = ('<b>{}</b>' +
+        '<a href="{}">.</a>').format(title,url)
     bot.send_message(msg_dest, message, parse_mode='HTML', 
-        disable_web_page_preview=True)
+        disable_web_page_preview=False)
 
 try:
     url = line_read()
