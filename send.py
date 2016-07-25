@@ -17,17 +17,17 @@ line_file = config['LINE']['file']
 bot = telebot.TeleBot(bot_token)
 
 def line_read():
-    with open(line_file, 'r') as file:
+    with open(line_file, 'r', encoding="utf-8") as file:
         first_line = file.readline()
         lines = file.readlines()
         file.close()
-    with open(line_file, 'w') as file:
+    with open(line_file, 'w', encoding="utf-8") as file:
         for l in lines:
             file.write(l)
         file.close()
     lines = open(line_file).readlines()
     random.shuffle(lines)
-    open(line_file, 'w').writelines(lines)
+    open(line_file, 'w', encoding="utf-8").writelines(lines)
     return first_line.strip()
 
 def send_line(url):

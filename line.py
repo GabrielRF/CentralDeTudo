@@ -13,10 +13,10 @@ line_file = config['LINE']['file']
 bot = telebot.TeleBot(bot_token)
 
 def to_line(text):
-   with open(line_file, 'a') as file:
+   with open(line_file, 'a', encoding="utf-8") as file:
        file.write(text + '\n')
        file.close()
-   with open(line_file, 'r') as file:
+   with open(line_file, 'r', encoding="utf-8") as file:
        lines = file.readlines()
        file.close()
        return len(lines) 
