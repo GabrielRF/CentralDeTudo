@@ -39,7 +39,7 @@ def send_line(url):
 
 def send_msg(title,url):
     message = ('<b>{}</b>' +
-        '<a href="{}">.</a>').format(title,url)
+        '\n<a href="{}">Link</a>').format(title,url)
     bot.send_message(msg_dest, message, parse_mode='HTML', 
         disable_web_page_preview=False)
 

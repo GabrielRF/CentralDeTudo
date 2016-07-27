@@ -23,9 +23,10 @@ def to_line(text):
 
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
+    # print(message.text)
     if message.from_user.username.lower() in bot_admin.lower():
         line_size = to_line(message.text)
         bot.reply_to(message, 'Link adicionado à fila.'
             + '\nNa fila: ' + str(line_size))
 
-bot.polling(none_stop=True)
+bot.polling()
