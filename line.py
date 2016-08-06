@@ -36,8 +36,8 @@ def echo_all(message):
     # print(message.text)
     if message.from_user.username.lower() in bot_admin.lower():
         logger_info.info(str(datetime.datetime.now()) + '\t' + str(message.from_user.username) + '\t' + str(message.text))
-        if 'http' in message.text:
-            line_size = to_line(message.text)
+        if 'http' in message.text[0:4]:
+            line_size = to_line(message.text.split(' ')[0].split('\n')[0])
             bot.reply_to(message, 'Link adicionado à fila.'
                 + '\nNa fila: ' + str(line_size))
         else:
