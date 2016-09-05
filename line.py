@@ -31,6 +31,19 @@ def to_line(text):
        file.close()
        return len(lines) 
 
+def line_qtd():
+    with open(line_file, 'r') as file:
+        lines = file.readlines()
+        file.close()
+        return len(lines)
+
+@bot.message_handler(commands=['fila'])
+def send_fila(message):
+    if message.from_user.username.lower() in bot_admin.lower():
+        logger_info.info(str(datetime.datetime.now()) + '\t' + message.from_user.username + '\t' + str(message.text))
+        first_line = line_qtd()
+        bot.reply_to(message, first_line)
+
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
     # print(message.text)
@@ -38,7 +51,7 @@ def echo_all(message):
         logger_info.info(str(datetime.datetime.now()) + '\t' + str(message.from_user.username) + '\t' + str(message.text))
         if 'http' in message.text[0:4]:
             line_size = to_line(message.text.split(' ')[0].split('\n')[0])
-            bot.reply_to(message, 'Link adicionado à fila.'
+            bot.reply_to(message, 'Link adicionado à /fila.'
                 + '\nNa fila: ' + str(line_size))
         else:
             bot.reply_to(message, 'Link?')
