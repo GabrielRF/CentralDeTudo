@@ -16,6 +16,20 @@ line_file = config['LINE']['file']
 
 bot = telebot.TeleBot(bot_token)
 
+def get_img(url):
+    response = requests.get(url)
+    html = BeautifulSoup(response.content, 'html.parser')
+    img = html.find('meta', {'property': 'og:image'})
+    if not img:
+        img = html.find('meta', {'name': 'og:image'})
+    try:
+        img = img['content']
+        preview = False
+    except TypeError:
+        img = ''
+        preview = True
+    return preview, img
+
 def line_read():
     with open(line_file, 'r', encoding="utf-8") as file:
         first_line = file.readline()
@@ -37,13 +51,14 @@ def send_line(url):
     print(title)
     domain = url.split('://')[1].split('/')[0]
     print(domain)
-    send_msg(title,url,domain)
+    preview, img = get_img(url)
+    send_msg(title,url,domain,img,preview)
 
-def send_msg(title,url,domain):
-    message = ('<b>{}</b>' +
-        '\n<a href="{}">{}</a>').format(title,url,domain)
+def send_msg(title,url,domain,img,preview):
+    message = ('<b>{}</b><a href="{}">.</a>' +
+        '\n<a href="{}">{}</a>').format(title,img,url,domain)
     bot.send_message(msg_dest, message, parse_mode='HTML', 
-        disable_web_page_preview=False)
+        disable_web_page_preview=preview)
 
 try:
     url = line_read()
