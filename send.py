@@ -35,11 +35,13 @@ def send_line(url):
     html = BeautifulSoup(response.content, 'html.parser')
     title = html.title.text.strip()
     print(title)
-    send_msg(title,url)
+    domain = url.split('://')[1].split('/')[0]
+    print(domain)
+    send_msg(title,url,domain)
 
-def send_msg(title,url):
+def send_msg(title,url,domain):
     message = ('<b>{}</b>' +
-        '\n<a href="{}">Link</a>').format(title,url)
+        '\n<a href="{}">{}</a>').format(title,url,domain)
     bot.send_message(msg_dest, message, parse_mode='HTML', 
         disable_web_page_preview=False)
 
