@@ -47,7 +47,10 @@ def line_read():
 def send_line(url):
     response = requests.get(url)
     html = BeautifulSoup(response.content, 'html.parser')
-    title = html.title.text.strip()
+    title = html.find('meta', {'property': 'og:title'})
+    title = title['content']
+    if not title:
+        title = html.title.text.strip()
     print(title)
     domain = url.split('://')[1].split('/')[0]
     print(domain)
