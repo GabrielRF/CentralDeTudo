@@ -47,9 +47,10 @@ def line_read():
 def send_line(url):
     response = requests.get(url)
     html = BeautifulSoup(response.content, 'html.parser')
-    title = html.find('meta', {'property': 'og:title'})
-    title = title['content']
-    if not title:
+    try:
+        title = html.find('meta', {'property': 'og:title'})
+        title = title['content']
+    except:
         title = html.title.text.strip()
     print(title)
     domain = url.split('://')[1].split('/')[0]
@@ -65,6 +66,7 @@ def send_msg(title,url,domain,img,preview):
 
 try:
     url = line_read()
+    print(url)
     send_line(url)
 except:
     pass
