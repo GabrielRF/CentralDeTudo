@@ -18,6 +18,7 @@ line_file = config['LINE']['file']
 bot = telebot.TeleBot(bot_token)
 
 def get_img(url):
+    print('img')
     response = requests.get(url)
     html = BeautifulSoup(response.content, 'html.parser')
     img = html.find('meta', {'property': 'og:image'})
@@ -26,9 +27,12 @@ def get_img(url):
     try:
         img = img['content']
         preview = False
+        if 'http:' not in img:
+            img = 'http:' + img
     except TypeError:
         img = ''
         preview = True
+    print(img)
     return preview, img
 
 def line_read():
