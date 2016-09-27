@@ -3,6 +3,7 @@ import configparser
 import random
 import requests
 import telebot
+import unshortenit
 import sys
 
 config = configparser.ConfigParser()
@@ -64,8 +65,13 @@ def send_msg(title,url,domain,img,preview):
     bot.send_message(msg_dest, message, parse_mode='HTML', 
         disable_web_page_preview=preview)
 
+def expand_url(url):
+    unshortened_uri,status = unshortenit.unshorten(url)
+    return unshortened_uri
+
 try:
     url = line_read()
+    url = expand_url(url)
     print(url)
     send_line(url)
 except:
