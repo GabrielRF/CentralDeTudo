@@ -27,7 +27,7 @@ def get_img(url):
     try:
         img = img['content']
         preview = False
-        if 'http:' not in img:
+        if 'http:' not in img and 'https:' not in img:
             img = 'http:' + img
     except TypeError:
         img = ''
