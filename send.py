@@ -58,7 +58,7 @@ def send_line(url):
     except:
         title = html.title.text.strip()
     print(title)
-    domain = url.split('://')[1].split('/')[0]
+    domain = url.split('://')[1].split('/')[0].replace('www','')
     print(domain)
     preview, img = get_img(url)
     send_msg(title,url,domain,img,preview)
