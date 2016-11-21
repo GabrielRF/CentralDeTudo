@@ -14,6 +14,7 @@ bot_token = config['BOT']['token']
 msg_dest = config['BOT']['dest']
 bot_admin = config['BOT']['admin']
 line_file = config['LINE']['file']
+lastUpdates = config['LINE']['updates']
 
 bot = telebot.TeleBot(bot_token)
 
@@ -73,10 +74,37 @@ def expand_url(url):
     unshortened_uri,status = unshortenit.unshorten(url)
     return unshortened_uri
 
-try:
+def fileUpdates(link):
+    with open(lastUpdates, 'r') as file:
+        lines = file.readlines()
+    if lines.__len__() >= 100:
+        lines.pop(0)
+    lines.append(''.join(link) + '\n')
+    with open(lastUpdates, 'w') as file:
+        for l in lines:
+            file.write(l)
+
+def checkUpdates(param,new):
+    updates = open(lastUpdates,'r')
+    for upd in updates:
+        if param in upd.split('\n'):
+            new = 0
+            #print('Repetido')
+            return new
+    if new == 1:
+        fileUpdates(param)
+        return new
+
+def read_line():
     url = line_read()
     url = expand_url(url)
     print(url)
-    send_line(url)
-except:
-    pass
+    return url
+
+if True:
+    url = read_line()
+    if checkUpdates(url, 1):
+        send_line(url)
+
+#except:
+#    pass
