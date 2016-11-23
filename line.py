@@ -63,6 +63,11 @@ def urgent_answer():
     fala = random.choice(falas)
     return fala
 
+@bot.message_handler(commands=['start'])
+def start(message):
+    if message.from_user.username.lower() in bot_admin.lower():
+        bot.reply_to(message, 'Olá!')
+
 @bot.message_handler(commands=['fila'])
 def send_fila(message):
     if message.from_user.username.lower() in bot_admin.lower():
