@@ -1,8 +1,10 @@
 from bs4 import BeautifulSoup
 import configparser
+from pocket import Pocket, PocketException
 import random
 import requests
 import telebot
+from thumbot import Thumbot
 import unshortenit
 import sys
 
@@ -15,6 +17,8 @@ msg_dest = config['BOT']['dest']
 bot_admin = config['BOT']['admin']
 line_file = config['LINE']['file']
 lastUpdates = config['LINE']['updates']
+pocket_consumer_key = config['POCKET']['consumer_key']
+pocket_access_token = config['POCKET']['access_token']
 
 bot = telebot.TeleBot(bot_token)
 
@@ -63,12 +67,21 @@ def send_line(url):
     print(domain)
     preview, img = get_img(url)
     send_msg(title,url,domain,img,preview)
+    send_pocket(url)
 
 def send_msg(title,url,domain,img,preview):
     message = ('<b>{}</b><a href="{}">.</a>' +
         '\n<a href="{}">{}</a>').format(title,img,url,domain)
     bot.send_message(msg_dest, message, parse_mode='HTML', 
-        disable_web_page_preview=preview)
+        disable_web_page_preview=preview,
+        reply_markup=Thumbot.empty_keyboard())
+
+def send_pocket(url):
+    pocket_instance = Pocket(
+        consumer_key=pocket_consumer_key,
+        access_token=pocket_access_token
+    )
+    pocket_instance.add(url)
 
 def expand_url(url):
     unshortened_uri,status = unshortenit.unshorten(url)

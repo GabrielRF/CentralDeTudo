@@ -4,7 +4,8 @@ import logging
 import logging.handlers
 import random
 import telebot
-
+from thumbot import Thumbot
+#No polling. Nesse arquivo mesmo
 config = configparser.ConfigParser()
 config.sections()
 config.read('/usr/local/bin/CentralDeTudo/bot.conf')
@@ -87,13 +88,51 @@ def send_urgent(message):
         logger_info.info(str(datetime.datetime.now()) + '\t' + message.from_user.username + '\t' + str(message.text))
         to_first_line(message.text.split(' ')[0].split('\n')[0])
 
+@bot.callback_query_handler(lambda q: q.data == 'thumb_up')
+def thumb_up(callback):
+
+    chat_id = callback.message.chat.id
+    message_id = callback.message.message_id
+    thumbot = Thumbot(chat_id, message_id)
+
+    print('thumb up +1: ')
+    print('chat_id: ', chat_id)
+    print('message_id: ', message_id)
+    print('ups: ', thumbot.ups)
+    print('downs: ', thumbot.downs)
+    print()
+    if thumbot.up(callback.from_user.id):
+        bot.edit_message_reply_markup(
+            chat_id=callback.message.chat.id,
+            message_id=callback.message.message_id,
+            reply_markup=thumbot.keyboard())
+
+
+@bot.callback_query_handler(lambda q: q.data == 'thumb_down')
+def thumb_down(callback):
+    chat_id = callback.message.chat.id
+    message_id = callback.message.message_id
+    thumbot = Thumbot(chat_id, message_id)
+    print('thumb down +1')
+    print('chat_id: ', chat_id)
+    print('message_id: ', message_id)
+    print('user_id: ', callback.from_user.id)
+    print('ups: ', thumbot.ups)
+    print('downs: ', thumbot.downs)
+    print()
+    if thumbot.down(callback.from_user.id):
+        bot.edit_message_reply_markup(
+            chat_id=callback.message.chat.id,
+            message_id=callback.message.message_id,
+            reply_markup=thumbot.keyboard())
+
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
     if message.from_user.username.lower() in bot_admin.lower():
         logger_info.info(str(datetime.datetime.now()) + '\t' + str(message.from_user.username) + '\t' + str(message.text))
         if 'http' in message.text[0:4]:
             line_size = to_line(message.text.split(' ')[0].split('\n')[0])
-            bot.reply_to(message, 'Link adicionado à /fila.'
+            bot.reply_to(message, 'Link adicionado a fila.'
                 + '\nNa fila: ' + str(line_size))
         else:
             bot.reply_to(message, 'Link?')
