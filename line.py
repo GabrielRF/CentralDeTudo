@@ -35,8 +35,8 @@ telebot.logger.setLevel(logging.INFO)
 bot = telebot.TeleBot(bot_token)
 app = flask.Flask(__name__)
 
-WEBHOOK_URL_BASE = "https://%s:%s" % (webhook_host, webhook_port)
-WEBHOOK_URL_PATH = "/%s/" % (bot_token)
+# WEBHOOK_URL_BASE = "https://%s:%s" % (webhook_host, webhook_port)
+# WEBHOOK_URL_PATH = "/%s/" % (bot_token)
 
 def to_first_line(text):
     with open(line_file, 'r') as original: data = original.read()
@@ -78,21 +78,21 @@ def urgent_answer():
     return fala
 
 # Empty webserver index, return nothing, just http 200
-@app.route('/', methods=['GET', 'HEAD'])
-def index():
-    return ''
+# @app.route('/', methods=['GET', 'HEAD'])
+# def index():
+#     return ''
 
 
 # Process webhook calls
-@app.route(WEBHOOK_URL_PATH, methods=['POST'])
-def webhook():
-    if flask.request.headers.get('content-type') == 'application/json':
-        json_string = flask.request.get_data().decode('utf-8')
-        update = telebot.types.Update.de_json(json_string)
-        bot.process_new_updates([update])
-        return ''
-    else:
-        flask.abort(403)
+# @app.route(WEBHOOK_URL_PATH, methods=['POST'])
+# def webhook():
+#     if flask.request.headers.get('content-type') == 'application/json':
+#         json_string = flask.request.get_data().decode('utf-8')
+#         update = telebot.types.Update.de_json(json_string)
+#         bot.process_new_updates([update])
+#         return ''
+#     else:
+#         flask.abort(403)
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -174,13 +174,12 @@ def echo_all(message):
 
 
 bot.remove_webhook()
-#bot.polling()
+bot.polling()
 
-print(WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
-bot.remove_webhook()
-bot.set_webhook(url=WEBHOOK_URL_BASE+WEBHOOK_URL_PATH,
-    certificate=open(webhook_ssl_cert, 'r'))
-app.run(host=webhook_listen,
-    port=int(webhook_port),
-        ssl_context=(webhook_ssl_cert, webhook_ssl_priv),
-        debug=True)
+#print(WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
+#bot.set_webhook(url=WEBHOOK_URL_BASE+WEBHOOK_URL_PATH,
+#    certificate=open(webhook_ssl_cert, 'r'))
+#app.run(host=webhook_listen,
+#    port=int(webhook_port),
+#        ssl_context=(webhook_ssl_cert, webhook_ssl_priv),
+#        debug=True)
