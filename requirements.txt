@@ -4,4 +4,4 @@ configparser==3.5.0
 pyTelegramBotAPI==2.1.5
 requests==2.10.0
 six==1.10.0
-urllib3==1.16
+urllib3==1.26.5
